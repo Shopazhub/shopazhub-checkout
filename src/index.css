@@ -1,0 +1,301 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+}
+
+.checkout-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.checkout-header h1 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.connected-wallet {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.checkout-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Order Summary */
+.order-summary {
+  margin-bottom: 24px;
+}
+
+.order-summary h2 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.order-ref {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.order-ref .label {
+  font-weight: 600;
+  color: #333;
+}
+
+.order-ref .value {
+  color: #667eea;
+  font-family: monospace;
+}
+
+.items-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+
+.items-list {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item .product-id {
+  color: #333;
+  font-weight: 500;
+}
+
+.item .qty {
+  color: #999;
+  font-size: 12px;
+}
+
+.item .price {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  border-top: 2px solid #667eea;
+}
+
+.order-total .label {
+  color: #333;
+}
+
+.order-total .amount {
+  color: #667eea;
+}
+
+.order-total .currency {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Payment Button */
+.payment-button-container {
+  margin-top: 24px;
+}
+
+.payment-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.payment-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.payment-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Messages */
+.success-message,
+.error-message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.success-message .tx-hash {
+  display: block;
+  margin-top: 8px;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.success-message a {
+  color: #155724;
+  text-decoration: underline;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.payment-info {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.info-text {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.terms {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Loading & Error States */
+.app-container.loading,
+.app-container.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  min-height: 300px;
+}
+
+.app-container.loading .spinner {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+  margin-bottom: 16px;
+}
+
+.connect-wallet {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  border-radius: 12px;
+}
+
+.connect-wallet h1 {
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.connect-wallet p {
+  margin: 0;
+  color: #666;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .app-container {
+    max-width: 100%;
+  }
+
+  .checkout-header h1 {
+    font-size: 20px;
+  }
+
+  .order-total {
+    font-size: 16px;
+  }
+
+  .payment-button {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
