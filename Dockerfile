@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -9,10 +9,10 @@ COPY . .
 RUN npm run build
 
 # Serve stage
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 RUN npm install -g serve
-COPY --from=build /app/build ./build
+COPY --from=build /app/dist ./dist
 
-EXPOSE 3003
-CMD ["serve", "-s", "build", "-l", "3003"]
+EXPOSE ${PORT:-3003}
+CMD serve -s dist -l ${PORT:-3003}

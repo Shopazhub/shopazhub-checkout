@@ -1,8 +1,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider, createConfig, http } from 'wagmi';
+import { WagmiProvider, createConfig, http, injected } from 'wagmi';
 import { celo, celoAlfajores } from 'wagmi/chains';
-import { injected } from '@wagmi/connectors';
 import App from './App';
 import './index.css';
 
