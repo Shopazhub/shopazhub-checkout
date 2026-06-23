@@ -27,7 +27,7 @@ const TOKENS = {
   cEUR: '0x01C5C0122039549AD1493B8220cABEdD739BC44E',
 };
 
-const PAYMENT_RECEIVER_ADDRESS = process.env.REACT_APP_PAYMENT_RECEIVER_ADDRESS || '';
+const PAYMENT_RECEIVER_ADDRESS = import.meta.env.VITE_PAYMENT_RECEIVER_ADDRESS || '';
 
 // Simple ERC20 ABI for approve and transfer
 const ERC20_ABI = [
@@ -112,7 +112,7 @@ export default function PaymentButton({ order, userAddress }: Props) {
       // Step 3: Notify backend
       console.log('📢 Notifying backend...');
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/orders/confirm-minipay`,
+        `${import.meta.env.VITE_API_URL}/orders/confirm-minipay`,
         {
           orderRef: order.orderId,
           txHash: paymentTx,
