@@ -1,11 +1,21 @@
+/*============================================
+  ShopazHub Checkout — Brand Theme
+  Primary:   #FF700A (Orange)
+  Secondary: #111111 (Dark purple/black)
+  Accent:    #410636 (Deep purple)
+  Light:     #818181 / #8B8D97
+  ============================================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #111111;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -22,29 +32,102 @@ code {
   padding: 20px;
 }
 
+/* Header with Logo */
 .checkout-header {
   text-align: center;
   color: white;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
+}
+
+.checkout-header .logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.checkout-header .logo-container img {
+  max-width: 180px;
+  height: auto;
 }
 
 .checkout-header h1 {
   margin: 0 0 10px 0;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
+  color: white;
 }
 
 .connected-wallet {
   margin: 0;
   font-size: 12px;
   opacity: 0.9;
+  color: #818181;
 }
 
+/* Content Card */
 .checkout-content {
   background: white;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Order Reference Input Form */
+.order-ref-form {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.order-ref-form h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.order-ref-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+.order-ref-form input:focus {
+  border-color: #FF700A;
+}
+
+.order-ref-form button {
+  width: 100%;
+  padding: 12px;
+  background: #FF700A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  font-family: inherit;
+}
+
+.order-ref-form button:hover:not(:disabled) {
+  background: #e66000;
+  transform: translateY(-1px);
+}
+
+.order-ref-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Order Summary */
@@ -56,6 +139,7 @@ code {
   margin: 0 0 16px 0;
   font-size: 18px;
   font-weight: 600;
+  color: #111111;
 }
 
 .order-ref {
@@ -74,15 +158,16 @@ code {
 }
 
 .order-ref .value {
-  color: #667eea;
+  color: #FF700A;
   font-family: monospace;
+  font-weight: 500;
 }
 
 .items-section h3 {
   margin: 0 0 12px 0;
   font-size: 14px;
   font-weight: 600;
-  color: #666;
+  color: #818181;
 }
 
 .items-list {
@@ -116,7 +201,7 @@ code {
 }
 
 .item .price {
-  color: #667eea;
+  color: #FF700A;
   font-weight: 600;
 }
 
@@ -129,15 +214,15 @@ code {
   border-radius: 8px;
   font-size: 18px;
   font-weight: 700;
-  border-top: 2px solid #667eea;
+  border-top: 2px solid #FF700A;
 }
 
 .order-total .label {
-  color: #333;
+  color: #111111;
 }
 
 .order-total .amount {
-  color: #667eea;
+  color: #FF700A;
 }
 
 .order-total .currency {
@@ -153,7 +238,7 @@ code {
 .payment-button {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #FF700A;
   color: white;
   border: none;
   border-radius: 8px;
@@ -164,16 +249,18 @@ code {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
 }
 
 .payment-button:hover:not(:disabled) {
+  background: #e66000;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 112, 10, 0.4);
 }
 
 .payment-button:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -234,7 +321,7 @@ code {
 .info-text {
   margin: 0 0 8px 0;
   font-size: 13px;
-  color: #666;
+  color: #818181;
 }
 
 .terms {
@@ -272,22 +359,284 @@ code {
 
 .connect-wallet h1 {
   margin: 0 0 16px 0;
-  color: #333;
+  color: #111111;
+  font-size: 22px;
+}
+
+.connect-wallet h2 {
+  margin: 0 0 16px 0;
+  color: #111111;
+  font-size: 18px;
 }
 
 .connect-wallet p {
   margin: 0;
-  color: #666;
+  color: #818181;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.connect-wallet button {
+  padding: 12px 24px;
+  background: #FF700A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.connect-wallet button:hover {
+  background: #e66000;
+}
+
+/* Footer */
+.checkout-footer {
+  margin-top: 2rem;
+  padding: 1rem 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 12px;
+}
+
+.footer-support {
+  margin-bottom: 1rem;
+}
+
+.footer-support-label {
+  margin: 0 0 0.5rem 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-support-channels {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.support-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.support-link:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.support-email {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.support-whatsapp {
+  background: #25D366;
+  color: white;
+  border: 1px solid #1ebe5d;
+}
+
+.checkout-footer a {
+  color: #FF700A;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.checkout-footer a:hover {
+  opacity: 0.8;
+}
+
+.checkout-footer .footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.checkout-footer .footer-copyright {
+  margin: 0;
+  opacity: 0.6;
+}
+
+/* Support Widget (floating action button) */
+.support-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.support-fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #FF700A;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(255, 112, 10, 0.45);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+
+.support-fab:hover {
+  background: #e66000;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(255, 112, 10, 0.55);
+}
+
+.support-fab--open {
+  background: #333;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.support-fab--open:hover {
+  background: #222;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.support-popup {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  width: 220px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform-origin: bottom right;
+}
+
+.support-popup--open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.support-popup-label {
+  margin: 0 0 12px 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #999;
+}
+
+.support-popup-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.15s;
+  margin-bottom: 6px;
+}
+
+.support-popup-option:last-child {
+  margin-bottom: 0;
+}
+
+.support-popup-option:hover {
+  transform: translateX(-2px);
+  text-decoration: none;
+}
+
+.support-popup-option--wa {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.support-popup-option--wa:hover {
+  background: #dcfce7;
+}
+
+.support-popup-option--wa .support-popup-icon {
+  background: #25D366;
+  color: white;
+}
+
+.support-popup-option--email {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.support-popup-option--email:hover {
+  background: #ffedd5;
+}
+
+.support-popup-option--email .support-popup-icon {
+  background: #FF700A;
+  color: white;
+}
+
+.support-popup-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.support-popup-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.support-popup-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.support-popup-sub {
+  font-size: 11px;
+  opacity: 0.7;
+  line-height: 1;
 }
 
 /* Mobile adjustments */
 @media (max-width: 480px) {
   .app-container {
     max-width: 100%;
+    padding: 12px;
+  }
+
+  .checkout-header .logo-container img {
+    max-width: 150px;
   }
 
   .checkout-header h1 {
-    font-size: 20px;
+    font-size: 18px;
+  }
+
+  .checkout-content {
+    padding: 16px;
   }
 
   .order-total {

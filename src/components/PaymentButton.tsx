@@ -17,17 +17,40 @@ interface Order {
 interface Props {
   order: Order;
   userAddress: string;
+  onError?: (message: string) => void;
 }
 
-// Celo token addresses (Sepolia testnet)
-// USDC on Celo Sepolia: 0x01C5C0122039549AD1493B8220cABEdD739BC44E
+/**
+ * CIP-64 Fee Abstraction on Celo Mainnet:
+ * These feeCurrency addresses enable paying network fees in stablecoins
+ * instead of CELO. MiniPay abstracts network fees automatically.
+ *
+ * USDm:  0x765DE816845861e75A25fCA122bb6898B8B1282a (18 decimals)
+ * USDC:  0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B (6 decimals) - Gas Adapter
+ * USDT:  0x0e2a3e05bc9a16f5292a6170456a710cb89c6f72 (6 decimals) - Gas Adapter
+ */
+const FEE_CURRENCIES = {
+  USDm: '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+  USDC: '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B',
+  USDT: '0x0e2a3e05bc9a16f5292a6170456a710cb89c6f72',
+};
+
+const DEFAULT_FEE_CURRENCY = FEE_CURRENCIES.USDm;
+
+// Token addresses for the payment contract (Celo Mainnet / Sepolia)
 const TOKENS = {
+  // Celo Sepolia testnet USDC
   cUSD: '0x01C5C0122039549AD1493B8220cABEdD739BC44E',
-  // cEUR on Celo Sepolia — the testnet uses USDC as primary stable
   cEUR: '0x01C5C0122039549AD1493B8220cABEdD739BC44E',
 };
 
 const PAYMENT_RECEIVER_ADDRESS = import.meta.env.VITE_PAYMENT_RECEIVER_ADDRESS || '';
+
+// Stablecoin display names (no crypto-jargon)
+const CURRENCY_LABELS: Record<string, string> = {
+  cUSD: 'Digital dollar',
+  cEUR: 'Digital euro',
+};
 
 // Simple ERC20 ABI for approve and transfer
 const ERC20_ABI = [
@@ -57,7 +80,7 @@ const PAYMENT_RECEIVER_ABI = [
   },
 ];
 
-export default function PaymentButton({ order, userAddress }: Props) {
+export default function PaymentButton({ order, userAddress, onError }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
@@ -67,6 +90,7 @@ export default function PaymentButton({ order, userAddress }: Props) {
   const handlePayment = async () => {
     if (!walletClient || !publicClient) {
       setError('Wallet not connected');
+      onError?.('Wallet not connected');
       return;
     }
 
@@ -77,7 +101,7 @@ export default function PaymentButton({ order, userAddress }: Props) {
       const tokenAddress = TOKENS[order.currency];
       const amount = parseUnits(order.total.toString(), 6); // cUSD/cEUR use 6 decimals
 
-      // Step 1: Approve token spending
+      // Step 1: Approve token spending (using legacy tx for MiniPay compatibility)
       console.log('📝 Approving token spending...');
       const approveTx = await walletClient.writeContract({
         address: tokenAddress as `0x${string}`,
@@ -85,7 +109,11 @@ export default function PaymentButton({ order, userAddress }: Props) {
         functionName: 'approve',
         args: [PAYMENT_RECEIVER_ADDRESS as `0x${string}`, amount],
         account: userAddress as `0x${string}`,
-      });
+        // EIP-1559: Use legacy transaction for MiniPay compatibility
+        type: 'legacy',
+        // CIP-64: Pay network fees with stablecoins via feeCurrency
+        feeCurrency: DEFAULT_FEE_CURRENCY as `0x${string}`,
+      } as any);
 
       // Wait for approval
       await publicClient.waitForTransactionReceipt({ hash: approveTx });
@@ -99,9 +127,11 @@ export default function PaymentButton({ order, userAddress }: Props) {
         functionName: 'payForOrder',
         args: [amount, order.orderId, order.currency],
         account: userAddress as `0x${string}`,
-        // Legacy transaction for MiniPay compatibility
+        // EIP-1559: Legacy transaction for MiniPay compatibility
         type: 'legacy',
-      });
+        // CIP-64: Pay network fees with stablecoins
+        feeCurrency: DEFAULT_FEE_CURRENCY as `0x${string}`,
+      } as any);
 
       // Wait for payment transaction
       const receipt = await publicClient.waitForTransactionReceipt({ hash: paymentTx });
@@ -134,10 +164,14 @@ export default function PaymentButton({ order, userAddress }: Props) {
       const message = err instanceof Error ? err.message : 'Payment failed';
       setError(message);
       console.error('❌ Payment error:', err);
+      // Notify parent about the error for low-balance handling
+      onError?.(message);
     } finally {
       setLoading(false);
     }
   };
+
+  const currencyLabel = CURRENCY_LABELS[order.currency] || 'Stablecoin';
 
   return (
     <div className="payment-button-container">
@@ -171,16 +205,16 @@ export default function PaymentButton({ order, userAddress }: Props) {
         ) : txHash ? (
           '✅ Payment Complete'
         ) : (
-          `Pay ${order.total.toFixed(2)} ${order.currency}`
+          `Pay ${order.total.toFixed(2)} ${currencyLabel}`
         )}
       </button>
 
       <div className="payment-info">
         <p className="info-text">
-          🔒 Secure payment powered by Celo blockchain
+          🔒 Secure payment processed on the Celo network
         </p>
         <p className="terms">
-          By clicking pay, you approve a transaction for {order.total.toFixed(2)} {order.currency}
+          By clicking pay, you approve a transaction for {order.total.toFixed(2)} {currencyLabel}
         </p>
       </div>
     </div>

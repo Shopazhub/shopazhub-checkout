@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, createConfig, http, injected } from 'wagmi';
 import { celo, celoAlfajores } from 'wagmi/chains';
-import App from './App';
+import App, { SupportWidget } from './App';
 import './index.css';
 
 /**
@@ -11,6 +11,9 @@ import './index.css';
  * MiniPay injects the correct chain automatically via the injected connector.
  *
  * Celo Sepolia block explorer: https://celo-sepolia.blockscout.com
+ *
+ * autoConnect: true enables automatic reconnection on page load,
+ * which is essential for MiniPay's Zero-Click Connect requirement.
  */
 const queryClient = new QueryClient();
 
@@ -25,10 +28,13 @@ const config = createConfig({
 
 export default function Root() {
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </WagmiProvider>
+    <>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </WagmiProvider>
+      <SupportWidget />
+    </>
   );
 }

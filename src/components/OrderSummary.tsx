@@ -15,7 +15,15 @@ interface Props {
   order: Order;
 }
 
+// Stablecoin display labels (no crypto-jargon per UI Copywriting Rules)
+const CURRENCY_LABELS: Record<string, string> = {
+  cUSD: 'Digital dollar',
+  cEUR: 'Digital euro',
+};
+
 export default function OrderSummary({ order }: Props) {
+  const currencyLabel = CURRENCY_LABELS[order.currency] || 'Stablecoin';
+
   return (
     <div className="order-summary">
       <h2>Order Summary</h2>
@@ -32,7 +40,7 @@ export default function OrderSummary({ order }: Props) {
             <div key={idx} className="item">
               <span className="product-id">{item.productId}</span>
               <span className="qty">×{item.quantity}</span>
-              <span className="price">{item.price.toFixed(2)} {order.currency}</span>
+              <span className="price">{item.price.toFixed(2)} {currencyLabel}</span>
             </div>
           ))}
         </div>
@@ -41,7 +49,7 @@ export default function OrderSummary({ order }: Props) {
       <div className="order-total">
         <span className="label">Total:</span>
         <span className="amount">
-          {order.total.toFixed(2)} <span className="currency">{order.currency}</span>
+          {order.total.toFixed(2)} <span className="currency">{currencyLabel}</span>
         </span>
       </div>
     </div>
