@@ -434,14 +434,14 @@ function Footer() {
 
       <div className="footer-links">
         <a
-          href="https://shopazhub.com/terms"
+          href="https://shopazhub.com/termsOfUse"
           target="_blank"
           rel="noopener noreferrer"
         >
           Terms of Service
         </a>
         <a
-          href="https://shopazhub.com/privacy"
+          href="https://shopazhub.com/privacy-policy"
           target="_blank"
           rel="noopener noreferrer"
         >
