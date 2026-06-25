@@ -17,7 +17,7 @@ interface Order {
 const DEPOSIT_URL = 'https://link.minipay.xyz/add_cash?tokens=USDm,USDC,USDT';
 
 // Conversion rate: Nigerian Naira to cUSD (USDC). Update as needed.
-const NGN_PER_USDC = 1600;
+const NGN_PER_USDC = 1500;
 
 export default function App() {
   const { address, isConnected, isConnecting, isReconnecting } = useAccount();
@@ -31,6 +31,7 @@ export default function App() {
 
   const [isMiniPay, setIsMiniPay] = useState(false);
   const [lowBalance, setLowBalance] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   useEffect(() => {
     // Zero-Click Connect: detect MiniPay automatically
@@ -122,17 +123,15 @@ export default function App() {
     setOrderRef('');
     setError(null);
     setLowBalance(false);
+    setPaymentError(null);
     setShowOrderInput(true);
   };
 
   const handlePaymentError = (errMessage: string) => {
-    // Low-Balance Handling: if the error indicates insufficient funds,
-    // redirect to deposit page instead of showing a generic error
     const lowFundsKeywords = [
       'insufficient funds',
+      'insufficient balance',
       'low balance',
-      'gas',
-      'fee',
       'not enough',
       'transfer amount exceeds balance',
     ];
@@ -142,6 +141,7 @@ export default function App() {
     );
 
     if (isLowFunds) {
+      setPaymentError(errMessage);
       setLowBalance(true);
     } else {
       setError(errMessage);
@@ -173,6 +173,12 @@ export default function App() {
             You don't have enough funds to complete this payment. Please add
             funds to your wallet and try again.
           </p>
+
+          {paymentError && (
+            <p style={{ fontSize: '11px', color: '#721c24', background: '#f8d7da', border: '1px solid #f5c6cb', borderRadius: '6px', padding: '8px 10px', marginTop: '8px', wordBreak: 'break-word' }}>
+              {paymentError}
+            </p>
+          )}
 
           <button
             onClick={redirectToDeposit}
