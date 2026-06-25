@@ -74,6 +74,26 @@ const PAYMENT_RECEIVER_ABI = [
   },
 ];
 
+function extractErrorMessage(err: unknown): string {
+  const raw = err instanceof Error ? err.message : String(err);
+
+  // Pull the human-readable reason out of the contract revert JSON:
+  // "message":"execution reverted: Order already processed"
+  const jsonMatch = raw.match(/"message"\s*:\s*"execution reverted:\s*([^"]+)"/);
+  if (jsonMatch) return jsonMatch[1].trim();
+
+  // Plain revert without JSON wrapping
+  const directMatch = raw.match(/execution reverted:\s*([^\n{(]+)/);
+  if (directMatch) return directMatch[1].trim();
+
+  // User rejected the transaction
+  if (raw.toLowerCase().includes('user rejected') || raw.toLowerCase().includes('rejected the request')) {
+    return 'Transaction cancelled.';
+  }
+
+  return 'Payment failed. Please try again.';
+}
+
 export default function PaymentButton({ order, userAddress, onError }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -154,10 +174,9 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
       console.log('✅ Payment successful!');
       window.location.href = `/orders/${order.orderId}/success?tx=${paymentTx}`;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Payment failed';
+      const message = extractErrorMessage(err);
       setError(message);
       console.error('❌ Payment error:', err);
-      // Notify parent about the error for low-balance handling
       onError?.(message);
     } finally {
       setLoading(false);
