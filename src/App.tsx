@@ -37,6 +37,11 @@ export default function App() {
 
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('orderRef');
+    const token = params.get('token');
+
+    if (token) {
+      localStorage.setItem('token', token);
+    }
 
     if (ref) {
       setOrderRef(ref);

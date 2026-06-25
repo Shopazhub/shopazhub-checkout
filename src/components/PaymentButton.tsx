@@ -139,26 +139,25 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
 
       setTxHash(paymentTx);
 
-      // Step 3: Notify backend
+      // Step 3: Notify backend (public endpoint — no auth required)
       console.log('📢 Notifying backend...');
-      await axios.post(
+      const confirmRes = await axios.post(
         `${import.meta.env.VITE_API_URL}/orders/confirm-minipay`,
         {
           orderRef: order.orderId,
           txHash: paymentTx,
+          payer: userAddress,
           amount: order.total,
           currency: order.currency,
-          payer: userAddress,
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
         }
       );
 
+      const payload = confirmRes.data?.payload;
+      if (!payload?.status) {
+        throw new Error(payload?.message || 'Payment confirmation failed');
+      }
+
       console.log('✅ Payment successful!');
-      // Redirect to success page or show success message
       window.location.href = `/orders/${order.orderId}/success?tx=${paymentTx}`;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Payment failed';
