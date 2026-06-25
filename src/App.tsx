@@ -16,6 +16,9 @@ interface Order {
 
 const DEPOSIT_URL = 'https://link.minipay.xyz/add_cash?tokens=USDm,USDC,USDT';
 
+// Conversion rate: Nigerian Naira to cUSD (USDC). Update as needed.
+const NGN_PER_USDC = 1600;
+
 export default function App() {
   const { address, isConnected, isConnecting, isReconnecting } = useAccount();
 
@@ -63,12 +66,7 @@ export default function App() {
       setLowBalance(false);
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/orders/${ref}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
+        `${import.meta.env.VITE_API_URL}/orders/order-details/${ref}`
       );
 
       let body: any = {};
@@ -79,14 +77,25 @@ export default function App() {
         // Ignore parsing errors
       }
 
-      if (!response.ok) {
-        throw new Error(body.message || 'Order not found');
+      if (!response.ok || body.message !== 'success') {
+        throw new Error(body.payload?.message || body.message || 'Order not found');
       }
 
-      // DEBUG: shows raw API response — remove after confirming order field names
-      setError('API response: ' + JSON.stringify(body));
-      setShowOrderInput(true);
-      return;
+      const { payload } = body;
+
+      const order: Order = {
+        orderId: payload.order.order_ref,
+        total: payload.total_amount / NGN_PER_USDC,
+        currency: 'cUSD',
+        items: (payload.orderItems ?? []).map((item: any) => ({
+          productId: item.product_ref ?? item.name ?? 'Item',
+          quantity: item.quantity ?? 1,
+          price: (item.amount ?? item.price ?? 0) / NGN_PER_USDC,
+        })),
+      };
+
+      setOrder(order);
+      setShowOrderInput(false);
     } catch (err) {
       setOrder(null);
       setError(
