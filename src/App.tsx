@@ -78,8 +78,10 @@ export default function App() {
         throw new Error(body.message || 'Order not found');
       }
 
-      setOrder(body);
-      setShowOrderInput(false);
+      // DEBUG: shows raw API response — remove after confirming order field names
+      setError('API response: ' + JSON.stringify(body));
+      setShowOrderInput(true);
+      return;
     } catch (err) {
       setOrder(null);
       setError(

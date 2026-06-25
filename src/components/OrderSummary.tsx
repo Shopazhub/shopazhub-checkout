@@ -40,7 +40,7 @@ export default function OrderSummary({ order }: Props) {
             <div key={idx} className="item">
               <span className="product-id">{item.productId}</span>
               <span className="qty">×{item.quantity}</span>
-              <span className="price">{(item.price ?? 0).toFixed(2)} {currencyLabel}</span>
+              <span className="price">{Number(item.price ?? 0).toFixed(2)} {currencyLabel}</span>
             </div>
           ))}
         </div>
@@ -49,7 +49,7 @@ export default function OrderSummary({ order }: Props) {
       <div className="order-total">
         <span className="label">Total:</span>
         <span className="amount">
-          {order.total.toFixed(2)} <span className="currency">{currencyLabel}</span>
+          {(Number(order.total) || 0).toFixed(2)} <span className="currency">{currencyLabel}</span>
         </span>
       </div>
     </div>

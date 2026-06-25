@@ -205,7 +205,7 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
         ) : txHash ? (
           '✅ Payment Complete'
         ) : (
-          `Pay ${order.total.toFixed(2)} ${currencyLabel}`
+          `Pay ${(Number(order.total) || 0).toFixed(2)} ${currencyLabel}`
         )}
       </button>
 
@@ -214,7 +214,7 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
           🔒 Secure payment processed on the Celo network
         </p>
         <p className="terms">
-          By clicking pay, you approve a transaction for {order.total.toFixed(2)} {currencyLabel}
+          By clicking pay, you approve a transaction for {(Number(order.total) || 0).toFixed(2)} {currencyLabel}
         </p>
       </div>
     </div>
