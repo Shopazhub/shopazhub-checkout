@@ -35,7 +35,7 @@ const FEE_CURRENCIES = {
   USDT: '0x0e2a3e05bc9a16f5292a6170456a710cb89c6f72',
 };
 
-const DEFAULT_FEE_CURRENCY = FEE_CURRENCIES.USDm;
+const DEFAULT_FEE_CURRENCY = FEE_CURRENCIES.USDC;
 
 // USDC (Circle bridged) on Celo Mainnet — the token payForOrder() pulls via transferFrom.
 // The cUSD/cEUR labels are just event metadata; the contract always uses USDC.
@@ -45,12 +45,6 @@ const TOKENS = {
 };
 
 const PAYMENT_RECEIVER_ADDRESS = import.meta.env.VITE_PAYMENT_RECEIVER_ADDRESS || '';
-
-// Stablecoin display names (no crypto-jargon)
-const CURRENCY_LABELS: Record<string, string> = {
-  cUSD: 'Digital dollar',
-  cEUR: 'Digital euro',
-};
 
 // Simple ERC20 ABI for approve and transfer
 const ERC20_ABI = [
@@ -170,7 +164,7 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
     }
   };
 
-  const currencyLabel = CURRENCY_LABELS[order.currency] || 'Stablecoin';
+  const orderAmount = Number(order.total) || 0;
 
   return (
     <div className="payment-button-container">
@@ -178,7 +172,7 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
         <div className="success-message">
           <p>✅ Payment successful!</p>
           <p className="tx-hash">
-            Tx: <a href={`https://celo-sepolia.blockscout.com/tx/${txHash}`} target="_blank" rel="noopener noreferrer">
+            Tx: <a href={`https://celoscan.io/tx/${txHash}`} target="_blank" rel="noopener noreferrer">
               {txHash.slice(0, 10)}...{txHash.slice(-8)}
             </a>
           </p>
@@ -188,6 +182,23 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
       {error && (
         <div className="error-message">
           <p>❌ {error}</p>
+        </div>
+      )}
+
+      {!txHash && (
+        <div className="cost-breakdown">
+          <div className="cost-row">
+            <span>Order amount</span>
+            <span>{orderAmount.toFixed(2)} Digital dollars</span>
+          </div>
+          <div className="cost-row">
+            <span>Network fee</span>
+            <span className="cost-fee">&lt; $0.01 USDC</span>
+          </div>
+          <div className="cost-row cost-row--total">
+            <span>You pay</span>
+            <span>{orderAmount.toFixed(2)} USDC</span>
+          </div>
         </div>
       )}
 
@@ -204,16 +215,13 @@ export default function PaymentButton({ order, userAddress, onError }: Props) {
         ) : txHash ? (
           '✅ Payment Complete'
         ) : (
-          `Pay ${(Number(order.total) || 0).toFixed(2)} ${currencyLabel}`
+          `Pay ${orderAmount.toFixed(2)} USDC`
         )}
       </button>
 
       <div className="payment-info">
         <p className="info-text">
-          🔒 Secure payment processed on the Celo network
-        </p>
-        <p className="terms">
-          By clicking pay, you approve a transaction for {(Number(order.total) || 0).toFixed(2)} {currencyLabel}
+          🔒 Secure payment via Celo network
         </p>
       </div>
     </div>

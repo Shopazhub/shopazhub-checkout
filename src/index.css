@@ -233,6 +233,44 @@ code {
   opacity: 0.9;
 }
 
+/* Cost Breakdown */
+.cost-breakdown {
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #555;
+  padding: 5px 0;
+}
+
+.cost-row + .cost-row {
+  border-top: 1px solid #e8e8e8;
+}
+
+.cost-fee {
+  color: #818181;
+}
+
+.cost-row--total {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111111;
+  border-top: 2px solid #FF700A !important;
+  margin-top: 4px;
+  padding-top: 8px;
+}
+
+.cost-row--total span:last-child {
+  color: #FF700A;
+}
+
 /* Payment Button */
 .payment-button-container {
   margin-top: 24px;

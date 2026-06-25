@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface Order {
   orderId: string;
   items: Array<{
@@ -16,13 +14,8 @@ interface Props {
 }
 
 // Stablecoin display labels (no crypto-jargon per UI Copywriting Rules)
-const CURRENCY_LABELS: Record<string, string> = {
-  cUSD: 'Digital dollar',
-  cEUR: 'Digital euro',
-};
-
 export default function OrderSummary({ order }: Props) {
-  const currencyLabel = CURRENCY_LABELS[order.currency] || 'Stablecoin';
+  const currencyLabel = 'Digital dollar';
 
   return (
     <div className="order-summary">
