@@ -36,11 +36,11 @@ export default function OrderSummary({ order }: Props) {
       <div className="items-section">
         <h3>Items</h3>
         <div className="items-list">
-          {order.items.map((item, idx) => (
+          {(order.items ?? []).map((item, idx) => (
             <div key={idx} className="item">
               <span className="product-id">{item.productId}</span>
               <span className="qty">×{item.quantity}</span>
-              <span className="price">{item.price.toFixed(2)} {currencyLabel}</span>
+              <span className="price">{(item.price ?? 0).toFixed(2)} {currencyLabel}</span>
             </div>
           ))}
         </div>

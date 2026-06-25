@@ -5,6 +5,34 @@ import { celo, celoAlfajores } from 'wagmi/chains';
 import App, { SupportWidget } from './App';
 import './index.css';
 
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="app-container" style={{ textAlign: 'center', paddingTop: '60px' }}>
+          <div className="connect-wallet">
+            <h2>Something went wrong</h2>
+            <p>Please refresh the page and try again.</p>
+            <button onClick={() => window.location.reload()} style={{ marginTop: '1rem' }}>
+              Refresh
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 /**
  * Wagmi config — celoAlfajores is kept as a fallback identifier,
  * but the Celo Sepolia chain (chainId: 11142220) is now the active testnet.
@@ -28,13 +56,13 @@ const config = createConfig({
 
 export default function Root() {
   return (
-    <>
+    <ErrorBoundary>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
       </WagmiProvider>
       <SupportWidget />
-    </>
+    </ErrorBoundary>
   );
 }

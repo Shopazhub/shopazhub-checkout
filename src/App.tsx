@@ -17,7 +17,7 @@ interface Order {
 const DEPOSIT_URL = 'https://link.minipay.xyz/add_cash?tokens=USDm,USDC,USDT';
 
 export default function App() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, isConnecting, isReconnecting } = useAccount();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [orderRef, setOrderRef] = useState('');
@@ -235,6 +235,18 @@ export default function App() {
             Search Again
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // On MiniPay, wagmi auto-connects via the injected connector but it's async.
+  // Wait for the connection to settle before rendering the checkout so we never
+  // pass an undefined address into PaymentButton.
+  if (isMiniPay && !isConnected && (isConnecting || isReconnecting)) {
+    return (
+      <div className="app-container loading">
+        <div className="spinner"></div>
+        <p>Connecting wallet...</p>
       </div>
     );
   }
