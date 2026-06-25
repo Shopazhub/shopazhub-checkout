@@ -7,22 +7,67 @@ import './index.css';
 
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
-  { hasError: boolean }
+  { hasError: boolean; error: Error | null; info: string }
 > {
-  state = { hasError: false };
+  state = { hasError: false, error: null as Error | null, info: '' };
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(_error: Error, errorInfo: React.ErrorInfo) {
+    this.setState({ info: errorInfo.componentStack ?? '' });
   }
 
   render() {
     if (this.state.hasError) {
+      const { error, info } = this.state;
       return (
-        <div className="app-container" style={{ textAlign: 'center', paddingTop: '60px' }}>
-          <div className="connect-wallet">
-            <h2>Something went wrong</h2>
-            <p>Please refresh the page and try again.</p>
-            <button onClick={() => window.location.reload()} style={{ marginTop: '1rem' }}>
+        <div className="app-container" style={{ paddingTop: '40px' }}>
+          <div style={{
+            background: '#1a0000',
+            border: '1px solid #ff4444',
+            borderRadius: '12px',
+            padding: '20px',
+            color: '#ff9999',
+            fontFamily: 'monospace',
+            fontSize: '12px',
+            wordBreak: 'break-word',
+          }}>
+            <p style={{ margin: '0 0 8px', fontWeight: 700, color: '#ff4444', fontSize: '14px' }}>
+              ❌ Render Error (debug mode)
+            </p>
+            <p style={{ margin: '0 0 12px', color: '#ffcccc', fontSize: '13px', fontFamily: 'inherit' }}>
+              <strong>{error?.name}:</strong> {error?.message}
+            </p>
+            {info && (
+              <pre style={{
+                margin: '0 0 16px',
+                whiteSpace: 'pre-wrap',
+                background: '#110000',
+                padding: '10px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                color: '#ff8888',
+                maxHeight: '200px',
+                overflow: 'auto',
+              }}>
+                {info}
+              </pre>
+            )}
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                background: '#ff4444',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '10px 20px',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: '13px',
+              }}
+            >
               Refresh
             </button>
           </div>
