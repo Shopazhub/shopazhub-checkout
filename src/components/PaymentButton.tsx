@@ -37,11 +37,11 @@ const FEE_CURRENCIES = {
 
 const DEFAULT_FEE_CURRENCY = FEE_CURRENCIES.USDm;
 
-// Token addresses for the payment contract (Celo Mainnet / Sepolia)
+// USDC (Circle bridged) on Celo Mainnet — the token payForOrder() pulls via transferFrom.
+// The cUSD/cEUR labels are just event metadata; the contract always uses USDC.
 const TOKENS = {
-  // Celo Sepolia testnet USDC
-  cUSD: '0x01C5C0122039549AD1493B8220cABEdD739BC44E',
-  cEUR: '0x01C5C0122039549AD1493B8220cABEdD739BC44E',
+  cUSD: '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
+  cEUR: '0xcebA9300f2b948710d2653dD7B07f33A8B32118C',
 };
 
 const PAYMENT_RECEIVER_ADDRESS = import.meta.env.VITE_PAYMENT_RECEIVER_ADDRESS || '';
